@@ -1,3 +1,5 @@
+// LeapSync - Copyright (c) 2023 Jacob Espy. See LICENSE.txt for more details. 
+
 // Binary constants that implement the escape characters used in slip encoding
 #define SLIP_END ((uint8_t)(0xC0))
 #define SLIP_ESC ((uint8_t)(0xDB))

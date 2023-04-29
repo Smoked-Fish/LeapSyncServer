@@ -1,3 +1,5 @@
+// LeapSync - Copyright (c) 2023 Jacob Espy. See LICENSE.txt for more details. 
+
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>

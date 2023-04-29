@@ -1,3 +1,4 @@
 bin/
 obj/
 tools/
+.vscode/settings.json

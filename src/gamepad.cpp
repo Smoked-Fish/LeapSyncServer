@@ -1,3 +1,6 @@
+// LeapSync - Copyright (c) 2023 Jacob Espy. See LICENSE.txt for more details. 
+// Using the ViGEmClient library to connect with ViGemBus
+
 #include <iostream>
 #include <string>
 #include <sstream>

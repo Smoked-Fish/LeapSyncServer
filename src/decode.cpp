@@ -1,3 +1,5 @@
+// LeapSyncServer - Copyright (c) 2023 Jacob Espy. See LICENSE.txt for more details. 
+
 #include "decode.h"
 #include "gamepad.h"
 #include "defines.h"
