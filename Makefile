@@ -6,6 +6,10 @@ OBJ=$(SRC:src/%.cpp=obj/%.o)
 EXE=bin/LeapSyncServer.exe
 UPX=tools/upx.exe
 
+.PHONY: all clean
+
+all: directories $(EXE)
+
 $(EXE): $(OBJ)
 	@echo "Linking objects into executable..."
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) > /dev/null 2>&1
@@ -24,5 +28,8 @@ compress: $(EXE)
 
 clean:
 	@echo "Cleaning up..."
-	@rm -f $(OBJ) $(EXE)
+	@rm -rf obj bin
 	@echo "Cleanup completed!"
+
+directories:
+	@mkdir -p obj bin
