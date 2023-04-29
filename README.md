@@ -18,27 +18,25 @@ To install LeapSyncServer, follow these steps:
 3. Run the LeapSyncServer executable to start the server.
 
 Note that you will still need to install the requirements listed in the [Requirements](#requirements) section.
- <!-- and configure the server as described in the [Usage](#usage) section. -->
 
 ## Usage
 
-Once LeapSyncServer is running and connected to LeapSync on your 3DS, you can use your 3DS as a DualShock4 controller for games on your PC that support DualShock4 input. To disconnect, simply close LeapSync on your 3DS or stop LeapSyncServer on your PC.
+Once you have have LeapSyncServer on your OC and installed LeapSync on your 3DS, you can use your 3DS as a controller for games on your PC that support DualShock4 input. To use LeapSyncServer, follow these steps:
 
-<!-- ## Configuration
+1. Launch LeapSyncServer on your PC.
+2. Launch LeapSync on your 3DS.
+4. Start a game on your PC that supports DualShock4 input.
+5. Use your 3DS as a controller for the game.
 
-You can configure LeapSyncServer by editing the `config.ini` file in the repository directory. The following options are available:
+## Acknowledgements
 
-- `port`: the port number that LeapSyncServer listens on for incoming connections (default is `49500`)
-- `debug`: whether to enable debug output (default is `false`) -->
+The following tools were used in the creation of LeapSyncServer:
 
-<!-- ## Troubleshooting
+- UPX (Ultimate Packer for eXecutables): Used to compress the LeapSyncServer executable.
+- ViGEmBus: A Windows driver for emulating virtual game controllers, used for creating the virtual DualShock4 controller.
+- ViGEmClient: A library for interfacing with the ViGEmBus driver, used for communication between LeapSyncServer and the emulated controller.
 
-If you encounter any issues with LeapSyncServer, try the following:
-
-- Make sure that your DualShock4 controller is connected to your PC and supported by the SCPToolkit driver (Windows only) or the ds4drv driver (macOS and Linux).
-- Make sure that you have installed all the required Python packages by running `pip install -r requirements.txt` in the repository directory.
-- Make sure that your 3DS is connected to the same network as your PC and that you have entered the correct IP address in LeapSync.
-- Try running LeapSyncServer with the `--debug` option to enable debug output. -->
+A special thanks to the developers of these tools for their contribution to the software development community.
 
 ## License
 
