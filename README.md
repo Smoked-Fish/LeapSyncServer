@@ -13,7 +13,7 @@ To run LeapSyncServer, you need the following:
 
 To install LeapSyncServer, follow these steps:
 
-1. Go to the [releases section](https://github.com/SmokedFish/leapsyncserver/releases) of this repository.
+1. Go to the [releases section](https://github.com/Smoked-Fish/LeapSyncServer/releases) of this repository.
 2. Download the latest compiled version of LeapSyncServer.
 3. Run the LeapSyncServer executable to start the server.
 
