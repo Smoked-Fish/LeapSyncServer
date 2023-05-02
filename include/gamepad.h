@@ -13,6 +13,13 @@ void initVIGEM();
 /// Initializes the button maps for button, trigger, dpad, and special inputs.
 void initButtonMaps();
 
+/// Updates the directional keys list with the given key and state,
+/// and returns the current direction of the D-pad.
+/// @param key The key to add or remove from the list.
+/// @param updateState 0 to add the key, 1 to remove the key.
+/// @return The current direction of the D-pad.
+USHORT updateDPadList(USHORT key, int updateState);
+
 /// Calculates the scaled and clamped x and y values for joystick input.
 /// @param x The raw x-axis value.
 /// @param y The raw y-axis value.

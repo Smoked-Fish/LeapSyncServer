@@ -17,8 +17,6 @@
 
 #include "gamepad.h"
 
-constexpr double CIRCLE_DEADZONE = 0.13;
-
 // Declare the driver, controller, and report
 PVIGEM_CLIENT ds4Driver, &ds4Client = ds4Driver;
 PVIGEM_TARGET ds4Controller;
@@ -28,6 +26,9 @@ std::unordered_map<std::string, DS4_BUTTONS> buttonMap;
 std::unordered_map<std::string, DS4_BUTTONS> triggerMap;
 std::unordered_map<std::string, DS4_DPAD_DIRECTIONS> direcMap;
 std::unordered_map<std::string, DS4_SPECIAL_BUTTONS> specialMap;
+
+// vector with pressed directional keys
+std::vector<USHORT> directionalKeys;
 
 void initVIGEM() {
     ds4Client = vigem_alloc();
@@ -71,15 +72,56 @@ void initButtonMaps() {
         {"DPAD_NORTH", DS4_BUTTON_DPAD_NORTH},
         {"DPAD_SOUTH", DS4_BUTTON_DPAD_SOUTH},
 
-        // {"DPAD_NORTHEAST", DS4_BUTTON_DPAD_NORTHEAST},
-        // {"DPAD_SOUTHEAST", DS4_BUTTON_DPAD_SOUTHEAST},
-        // {"DPAD_SOUTHWEST", DS4_BUTTON_DPAD_SOUTHWEST},
-        // {"DPAD_NORTHWEST", DS4_BUTTON_DPAD_NORTHWEST}
+        {"DPAD_NORTHEAST", DS4_BUTTON_DPAD_NORTHEAST},
+        {"DPAD_SOUTHEAST", DS4_BUTTON_DPAD_SOUTHEAST},
+        {"DPAD_SOUTHWEST", DS4_BUTTON_DPAD_SOUTHWEST},
+        {"DPAD_NORTHWEST", DS4_BUTTON_DPAD_NORTHWEST}
     };
 
     specialMap = {
         {"TOUCHPAD", DS4_SPECIAL_BUTTON_TOUCHPAD}
     };
+}
+
+USHORT updateDPadList(USHORT key, int updateState) {
+    if (updateState == 0) {
+        // Add the key to the list if it is not already present
+        if (std::find(directionalKeys.begin(), directionalKeys.end(), key) == directionalKeys.end()) {
+            directionalKeys.push_back(key);
+        }
+    } else {
+        // Remove the key from the list if it is present
+        const auto it = std::find(directionalKeys.begin(), directionalKeys.end(), key);
+        if (it != directionalKeys.end()) {
+            directionalKeys.erase(it);
+        }
+    }
+
+    const bool hasNorth = std::find(directionalKeys.begin(), directionalKeys.end(), DS4_BUTTON_DPAD_NORTH) != directionalKeys.end();
+    const bool hasEast = std::find(directionalKeys.begin(), directionalKeys.end(), DS4_BUTTON_DPAD_EAST) != directionalKeys.end();
+    const bool hasSouth = std::find(directionalKeys.begin(), directionalKeys.end(), DS4_BUTTON_DPAD_SOUTH) != directionalKeys.end();
+    const bool hasWest = std::find(directionalKeys.begin(), directionalKeys.end(), DS4_BUTTON_DPAD_WEST) != directionalKeys.end();
+
+    USHORT dPad = DS4_BUTTON_DPAD_NONE;
+    if (hasNorth && hasEast) {
+        dPad = DS4_BUTTON_DPAD_NORTHEAST;
+    } else if (hasNorth && hasWest) {
+        dPad = DS4_BUTTON_DPAD_NORTHWEST;
+    } else if (hasSouth && hasEast) {
+        dPad = DS4_BUTTON_DPAD_SOUTHEAST;
+    } else if (hasSouth && hasWest) {
+        dPad = DS4_BUTTON_DPAD_SOUTHWEST;
+    } else if (hasNorth) {
+        dPad = DS4_BUTTON_DPAD_NORTH;
+    } else if (hasSouth) {
+        dPad = DS4_BUTTON_DPAD_SOUTH;
+    } else if (hasEast) {
+        dPad = DS4_BUTTON_DPAD_EAST;
+    } else if (hasWest) {
+        dPad = DS4_BUTTON_DPAD_WEST;
+    }
+
+    return dPad;
 }
 
 std::pair<double, double> calculateXY(int x, int y, int state) {
@@ -131,12 +173,10 @@ void updateButton(const std::string& updateData, int updateState) {
     }
 
     if (dMap != direcMap.end()) {
+        USHORT dPad = updateDPadList(dMap->second, updateState);
+
         ds4Report.Report.wButtons &= ~0xF;
-        if (updateState == 0) {            
-            ds4Report.Report.wButtons |= (USHORT)dMap->second;
-        } else {
-            ds4Report.Report.wButtons |= (USHORT)DS4_BUTTON_DPAD_NONE;
-        }
+        ds4Report.Report.wButtons |= dPad;
         std::cout << "[DS4] DPad data received from client:      (" << dMap->first << ", " << updateState << ")" << std::endl;
     }
 
