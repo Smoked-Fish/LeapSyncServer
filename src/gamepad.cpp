@@ -148,8 +148,8 @@ void updateButton(const std::string& updateData, int updateState) {
     }
 }
 
-void updateJoystick(const std::string& updateJoystick, int stick) {
-    std::stringstream ss(updateJoystick);
+void updateJoystick(const std::string& joystickData, int stick) {
+    std::stringstream ss(joystickData);
     char c; // used to discard the '(' and ',' characters
     int x, y;
 
@@ -167,16 +167,44 @@ void updateJoystick(const std::string& updateJoystick, int stick) {
     std::cout << "Decoded data from client: (" << result_x << ", " << result_y << ")" << std::endl;
 }
 
-void updateGyro(const std::string& gyroData) {
-    std::stringstream ss(gyroData);
+void updateTouchpad(const std::string& touchpadData) {
+    std::stringstream ss(touchpadData);
+    char c;
+    int x, y;
+
+    ss >> c >> x >> c >> y >> c;
+
+    // Scale the 3DS resolution to the DS4 touchpad resolution (1920x943)
+    int scaledX = (x * 1920) / 320;
+    int scaledY = (y * 943) / 240 ;
+
+    ds4Report.Report.sCurrentTouch.bIsUpTrackingNum1 = (false << 7);
+    ds4Report.Report.sCurrentTouch.bTouchData1[0] = (scaledX & 0xFF); // Store the lower 8 bits of X
+    ds4Report.Report.sCurrentTouch.bTouchData1[1] = ((scaledX >> 8) & 0x0F) | ((scaledY & 0x0F) << 4); // Store upper 4 bits of X and lower 4 bits of Y
+    ds4Report.Report.sCurrentTouch.bTouchData1[2] = (scaledY >> 4) & 0xFF; // Store the upper 8 bits of Y
+
+    // Release touch if coordinates are (0, 0)
+    if (scaledX == 0 && scaledY == 0) {
+        ds4Report.Report.sCurrentTouch.bIsUpTrackingNum1 = (true << 7);
+    }
+}
+
+void updateMotion(const std::string& motionData, int gyro) {
+    std::stringstream ss(motionData);
     char c;
     int x, y, z;
 
     ss >> c >> x >> c >> y >> c >> z >> c;
 
-    ds4Report.Report.wGyroX = -x;
-    ds4Report.Report.wGyroY = y;
-    ds4Report.Report.wGyroZ = z;
+    if (gyro == 5) {
+        ds4Report.Report.wGyroX = -x;
+        ds4Report.Report.wGyroY = z;
+        ds4Report.Report.wGyroZ = y;
+    } else {
+        ds4Report.Report.wAccelX = x;
+        ds4Report.Report.wAccelY = y;
+        ds4Report.Report.wAccelZ = z;
+    }
 }
 
 void processInput() {
@@ -195,8 +223,13 @@ void joystickHandler(const std::string& joystickData, int stick) {
     processInput();
 }
 
-void gyroHandler(const std::string& gyroData) {
-    updateGyro(gyroData);
+void touchpadHandler(const std::string& touchpadData) {
+    updateTouchpad(touchpadData);
+    processInput();
+}
+
+void motionHandler(const std::string& motionData, int gyro) {
+    updateMotion(motionData, gyro);
     processInput();
 }
 

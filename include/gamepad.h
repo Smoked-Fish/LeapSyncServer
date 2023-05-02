@@ -26,13 +26,18 @@ std::pair<double, double> calculateXY(int x, int y, int state);
 void updateButton(const std::string& updateData, int updateState);
 
 /// Updates the joystick state of the virtual gamepad.
-/// @param updateJoystick The joystick data string in the format "(x,y)".
+/// @param joystickData The joystick data string in the format "(x,y)".
 /// @param stick The stick identifier (2: left stick, 3: right stick).
-void updateJoystick(const std::string& updateJoystick, int stick);
+void updateJoystick(const std::string& joystickData, int stick);
 
-/// Updates the gyro state of the virtual gamepad.
-/// @param gyroData The gyro data string in the format "(x,y,z)".
-void updateGyro(const std::string& gyroData);
+/// Updates the touchpad state of the virtual gamepad.
+/// @param touchData The touchpad data string in the format "(x,y)".
+void updateTouchpad(const std::string& touchpadData);
+
+/// Updates the motion data of the virtual gamepad.
+/// @param motionData The motion data string in the format "(x,y,z)".
+/// @param gyro The motion identifier (5: gyro, 6: accel).
+void updateMotion(const std::string& motionData, int gyro);
 
 /// Processes the input updates and sends them to the virtual gamepad.
 void processInput();
@@ -47,9 +52,14 @@ void buttonHandler(const std::string& buttonData, int updateState);
 /// @param stick The stick identifier (2: left stick, 3: right stick).
 void joystickHandler(const std::string& joystickData, int stick);
 
+/// Handles touchpad updates for the virtual gamepad.
+/// @param joystickData The touchpad data string in the format "(x,y)".
+void touchpadHandler(const std::string& touchData);
+
 /// Handles gyro updates for the virtual gamepad.
-/// @param gyroData The gyro data string in the format "(x,y,z)".
-void gyroHandler(const std::string& gyroData);
+/// @param motionData The motion data string in the format "(x,y,z)".
+/// @param gyro The motion identifier (5: gyro, 6: accel).
+void motionHandler(const std::string& motionData, int gyro);
 
 /// Initializes the virtual gamepad session.
 void gamepadSession();
