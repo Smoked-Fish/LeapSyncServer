@@ -104,16 +104,16 @@ void updateButton(const std::string& updateData, int updateState) {
     const auto sMap = specialMap.find(updateData);
 
     if (bMap != buttonMap.end()) {
-        std::cout << "Decoded data from client: (" << bMap->first << ", " << updateState << ")" << std::endl;
         if (updateState == 0) {
             ds4Report.Report.wButtons |= bMap->second;
         } else {
             ds4Report.Report.wButtons &= ~bMap->second;
         }
+
+        std::cout << "[DS4] Button data received from client:    (" << bMap->first << ", " << updateState << ")" << std::endl;
     }
 
     if (tMap != triggerMap.end()) {
-        std::cout << "Decoded data from client: (" << tMap->first << ", " << updateState << ")" << std::endl;
         const bool isLeftTrigger = tMap->second == triggerMap.at("TRIGGER_LEFT");
         const bool isRightTrigger = tMap->second == triggerMap.at("TRIGGER_RIGHT");
 
@@ -126,25 +126,27 @@ void updateButton(const std::string& updateData, int updateState) {
             ds4Report.Report.bTriggerR = isRightTrigger ? 0 : ds4Report.Report.bTriggerR;
             ds4Report.Report.wButtons &= ~tMap->second;
         }
+
+        std::cout << "[DS4] Trigger data received from client:   (" << tMap->first << ", " << updateState << ")" << std::endl;
     }
 
     if (dMap != direcMap.end()) {
-        std::cout << "Decoded data from client: (" << dMap->first << ", " << updateState << ")" << std::endl;
         ds4Report.Report.wButtons &= ~0xF;
         if (updateState == 0) {            
             ds4Report.Report.wButtons |= (USHORT)dMap->second;
         } else {
             ds4Report.Report.wButtons |= (USHORT)DS4_BUTTON_DPAD_NONE;
         }
+        std::cout << "[DS4] DPad data received from client:      (" << dMap->first << ", " << updateState << ")" << std::endl;
     }
 
     if (sMap != specialMap.end()) {
-        std::cout << "Decoded data from client: (" << sMap->first << ", " << updateState << ")" << std::endl;
         if (updateState == 0) {
             ds4Report.Report.bSpecial |= sMap->second;
         } else {
             ds4Report.Report.bSpecial &= ~sMap->second;
         }
+        std::cout << "[DS4] Special data received from client:   (" << sMap->first << ", " << updateState << ")" << std::endl;
     }
 }
 
@@ -160,11 +162,12 @@ void updateJoystick(const std::string& joystickData, int stick) {
     if (stick == 2) {
         ds4Report.Report.bThumbLX = result_x;
         ds4Report.Report.bThumbLY = -result_y;
+        std::cout << "[DS4] CirclePad data received from client: (" << result_x << ", " << -result_y << ")" << std::endl;
     } else {
         ds4Report.Report.bThumbRX = result_x;
         ds4Report.Report.bThumbRY = -result_y;
+        std::cout << "[DS4] C-Stick data received from client:   (" << result_x << ", " << -result_y << ")" << std::endl;
     }
-    std::cout << "Decoded data from client: (" << result_x << ", " << result_y << ")" << std::endl;
 }
 
 void updateTouchpad(const std::string& touchpadData) {
@@ -182,11 +185,13 @@ void updateTouchpad(const std::string& touchpadData) {
     ds4Report.Report.sCurrentTouch.bTouchData1[0] = (scaledX & 0xFF); // Store the lower 8 bits of X
     ds4Report.Report.sCurrentTouch.bTouchData1[1] = ((scaledX >> 8) & 0x0F) | ((scaledY & 0x0F) << 4); // Store upper 4 bits of X and lower 4 bits of Y
     ds4Report.Report.sCurrentTouch.bTouchData1[2] = (scaledY >> 4) & 0xFF; // Store the upper 8 bits of Y
-
+    
     // Release touch if coordinates are (0, 0)
     if (scaledX == 0 && scaledY == 0) {
         ds4Report.Report.sCurrentTouch.bIsUpTrackingNum1 = (true << 7);
     }
+
+    std::cout << "[DS4] Touchpad data received from client: (" << scaledX << ", " << scaledY << ")" << std::endl;
 }
 
 void updateMotion(const std::string& motionData, int gyro) {
@@ -200,10 +205,13 @@ void updateMotion(const std::string& motionData, int gyro) {
         ds4Report.Report.wGyroX = -x;
         ds4Report.Report.wGyroY = z;
         ds4Report.Report.wGyroZ = y;
+        // std::cout << "[DS4] Gyro data received from client: (" << -x << ", " << z << ", " << y << ")" << std::endl;
+
     } else {
         ds4Report.Report.wAccelX = x;
         ds4Report.Report.wAccelY = y;
         ds4Report.Report.wAccelZ = z;
+        // std::cout << "[DS4] Accelerometer data received from client: (" << x << ", " << y << ", " << z << ")" << std::endl;
     }
 }
 
