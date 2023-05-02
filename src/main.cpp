@@ -38,7 +38,11 @@ void clientHandler(SOCKET clientSocket) {
                     joystickHandler(pair.first, pair.second);
                     break;
                 case 4:
-                    gyroHandler(pair.first);
+                    touchpadHandler(pair.first);
+                    break;
+                case 5:
+                case 6:
+                    motionHandler(pair.first, pair.second);
                     break;
                 default:
                     // Handle unknown action code
