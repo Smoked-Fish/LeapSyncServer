@@ -277,8 +277,12 @@ VOID FORCEINLINE DS4_REPORT_INIT_EX(
 
     DS4_SET_DPAD((PDS4_REPORT)&(Report->Report), DS4_BUTTON_DPAD_NONE);
 
-    Report->Report.bBatteryLvlSpecial = 0x08;
-    Report->Report.bTouchPacketsN = 0x01;
+    Report->Report.sCurrentTouch.bIsUpTrackingNum1 = (1 << 7);
+    Report->Report.sCurrentTouch.bIsUpTrackingNum2 = (1 << 7);
+    Report->Report.sPreviousTouch[0].bIsUpTrackingNum1 = (1 << 7);
+    Report->Report.sPreviousTouch[0].bIsUpTrackingNum2 = (1 << 7);
+    Report->Report.sPreviousTouch[1].bIsUpTrackingNum1 = (1 << 7);
+    Report->Report.sPreviousTouch[1].bIsUpTrackingNum2 = (1 << 7);
 }
 
 typedef struct _DS4_OUTPUT_BUFFER
