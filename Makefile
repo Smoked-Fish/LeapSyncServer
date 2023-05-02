@@ -5,13 +5,15 @@ SRC=src/main.cpp src/decode.cpp src/gamepad.cpp
 OBJ=$(SRC:src/%.cpp=obj/%.o)
 EXE=bin/LeapSyncServer.exe
 UPX=tools/upx.exe
+RC=app.rc
+RES=obj/app.res
 
 .PHONY: all clean
 
 all: directories $(EXE)
 
-$(EXE): $(OBJ)
-	@echo "Linking objects into executable..."
+$(EXE): $(OBJ) $(RES)
+	@echo "Linking objects and resources into executable..."
 	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) > /dev/null 2>&1
 	@cp lib/ViGEmClient.dll bin
 	@echo "Build completed!"
@@ -19,6 +21,10 @@ $(EXE): $(OBJ)
 obj/%.o: src/%.cpp
 	@echo "Compiling $<..."
 	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(RES): $(RC)
+	@echo "Compiling resource file..."
+	@windres $(RC) -O coff -o $@
 
 compress: $(EXE)
 	@echo "Compressing $(EXE) and bin/ViGEmClient.dll..."
