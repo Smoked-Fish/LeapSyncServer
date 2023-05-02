@@ -93,7 +93,7 @@ std::vector<std::pair<std::string, int>> processData(const std::vector<uint8_t> 
     };
     std::unordered_map<char, int> slipMap = {
         {SLIP_TRUE, 0}, {SLIP_FALSE, 1}, {SLIP_CIRCLE, 2},
-        {SLIP_CSTICK, 3}, {SLIP_GYRO, 4}
+        {SLIP_CSTICK, 3}, {SLIP_TOUCH, 4}, {SLIP_GYRO, 5}, {SLIP_ACCEL, 6}
     };
 
     std::string currentStr;

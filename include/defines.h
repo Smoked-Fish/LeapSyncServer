@@ -14,8 +14,12 @@
 #define SLIP_CIRCLE ((uint8_t)(0xC3))
 #define SLIP_CSTICK ((uint8_t)(0xC4))
 
-// Binary constants for gyroscope angular rate
-#define SLIP_GYRO ((uint8_t)(0xC5))
+// Binary constants for the touch position
+#define SLIP_TOUCH ((uint8_t)(0xC5))
+
+// Binary constants for gyroscope angular rate and the accelerometer vector.
+#define SLIP_GYRO ((uint8_t)(0xC6))
+#define SLIP_ACCEL ((uint8_t)(0xC7))
 
 // Binary constants for gamepad button inputs
 #define DS_CIRCLE ((uint8_t)(0x00))
