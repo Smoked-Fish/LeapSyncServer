@@ -1,6 +1,6 @@
 # LeapSyncServer
 
-LeapSyncServer is a server program that receives data from LeapSync, a 3DS homebrew application, and emulates a DualShock4 controller. This allows you to use your 3DS as a controller for games on your PC that support DualShock4 input, including support for gyroscope, accelerometer, and touchscreen inputs from the 3DS.
+LeapSyncServer is a server program that receives data from LeapSync, a 3DS homebrew application, and emulates a DualShock4 controller. This allows you to use your 3DS as a controller for games on your PC that support DualShock4 input, including support for touchpad, gyroscope and accelerometer inputs from the 3DS.
 
 ## Requirements
 
